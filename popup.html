@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>AI Summarizer</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="output.css">
+    <style>
+      body {
+        font-family: 'Inter', sans-serif;
+        
+      }
+      #result {
+        white-space: pre-wrap;
+        word-break: break-word;
+      }
+    </style>
+  </head>
+  <body >
+    <div class="container max-w-2xl mx-auto bg-white shadow-lg rounded-lg p-6">
+      <h2 class="text-2xl font-semibold text-indigo-600 mb-4">AI Summary</h2>
+      <div class="flex flex-wrap justify-center gap-4 mb-4">
+        <select id="summery-type" class="border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+          <option value="brief">Brief</option>
+          <option value="detailed">Detailed</option>
+          <option value="bullets">Bullet Points</option>
+        </select>
+        <button id="summerize" class="bg-indigo-500 hover:bg-indigo-700 text-white font-semibold rounded-md py-2 px-4 transition duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-50">
+          Summarize
+        </button>
+        <button id="copy-btn" class="bg-blue-500 hover:bg-blue-700 text-white font-semibold rounded-md py-2 px-4 transition duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">
+          Copy
+        </button>
+      </div>
+      <pre id="result" class="bg-gray-50 border border-gray-200 rounded-md p-4 text-gray-800 text-sm">Select a type and click Summarize...</pre>
+    </div>
+    <script src="popup.js"></script>
+  </body>
+</html>
