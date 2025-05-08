@@ -33,7 +33,8 @@ AI-Simplify is a powerful yet simple Chrome extension that uses AI to summarize 
 
 ## 📸 Screenshots
 project is done and i will add some features in near future.
-<img src="https://media.giphy.com/media/cJMlR1SsCSkUjVY3iK/giphy.gif" width="200">
+
+<img src="https://media.giphy.com/media/cJMlR1SsCSkUjVY3iK/giphy.gif" width="160">
 
 ## 📝 How to Use
 
