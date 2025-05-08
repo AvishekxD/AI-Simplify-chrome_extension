@@ -9,20 +9,3 @@ chrome.runtime.onInstalled.addListener(() => {
         }
     });
 });
-
-chrome.browserAction.onClicked.addListener(function () {
-    chrome.windows.create({
-        url: 'popup.html',
-        type: 'popup',
-        width: 500,
-        height: 400,
-    }, function (newWindow) {
-        const popupId = newWindow.id;
-        chrome.scripting.executeScript({
-            target: { tabId: popupId },
-            func: () => {
-                document.body.style.borderRadius = '10px';
-            }
-        });
-    });
-});

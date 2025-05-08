@@ -2,36 +2,56 @@
 <html lang="en">
   <head>
     <title>AI Summarizer</title>
+    <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="stylesheet" href="output.css">
     <style>
-      body {
+      html, body {
+        width: 500px;
         font-family: 'Inter', sans-serif;
-        
       }
       #result {
         white-space: pre-wrap;
         word-break: break-word;
       }
+      .loader {
+        border: 4px solid #f3f3f3;
+        border-top: 4px solid #3498db;
+        border-radius: 50%;
+        width: 30px;
+        height: 30px;
+        animation: spin 1s linear infinite;
+      }
+      @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
     </style>
   </head>
-  <body >
-    <div class="container max-w-2xl mx-auto bg-white shadow-lg rounded-lg p-6">
-      <h2 class="text-2xl font-semibold text-indigo-600 mb-4">AI Summary</h2>
+  <body>
+    <div class="container max-w-2xl mx-auto bg-white shadow-lg rounded-lg p-6 h-full">
+      <h2 id="crazy-heading" class="text-2xl font-bold text-indigo-600 flex flex-wrap justify-center py-2 cursor-default"></h2>
       <div class="flex flex-wrap justify-center gap-4 mb-4">
-        <select id="summery-type" class="border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
-          <option value="brief">Brief</option>
-          <option value="detailed">Detailed</option>
-          <option value="bullets">Bullet Points</option>
-        </select>
-        <button id="summerize" class="bg-indigo-500 hover:bg-indigo-700 text-white font-semibold rounded-md py-2 px-4 transition duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-50">
+        <div class="relative inline-block">
+          <select id="summary-type" class="appearance-none border border-gray-300 h-10 w-28 rounded-md py-2 px-3 pr-8 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+            <option value="brief">Brief</option>
+            <option value="detailed">Detailed</option>
+            <option value="bullets">Bullet Points</option>
+          </select>
+          <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-600">
+            <svg class="h-5 w-5 fill-current" viewBox="0 1 20 20">
+              <path d="M5.25 7.5L10 12.25L14.75 7.5H5.25Z" />
+            </svg>
+          </div>
+        </div>
+        <button id="summarize" class="cursor-pointer font-semibold before:ease relative h-10 w-32 overflow-hidden border border-green-500 bg-green-500 text-white shadow-2xl transition-all before:absolute before:right-0 before:top-0 before:h-12 before:w-6 before:translate-x-12 before:rotate-6 before:bg-white before:opacity-10 before:duration-700 hover:shadow-green-500 hover:before:-translate-x-40 rounded-md">
           Summarize
         </button>
-        <button id="copy-btn" class="bg-blue-500 hover:bg-blue-700 text-white font-semibold rounded-md py-2 px-4 transition duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">
+        <button id="copy-btn" class="cursor-pointer before:ease bg-blue-500 border-blue-700 relative text-white shadow-2xl font-semibold rounded-md py-2 px-4 transition-all before:absolute before:right-0 before:top-0 before:h-12 before:w-6 before:translate-x-12 before:rotate-6 before:bg-white before:opacity-10 before:duration-700 hover:shadow-blue-500 hover:before:-translate-x-40">
           Copy
         </button>
       </div>
-      <pre id="result" class="bg-gray-50 border border-gray-200 rounded-md p-4 text-gray-800 text-sm">Select a type and click Summarize...</pre>
+      <div id="result" class="bg-gray-50 border border-gray-200 rounded-md p-4 text-gray-800 text-sm">Select a type and click Summarize...</div>
     </div>
     <script src="popup.js"></script>
   </body>
