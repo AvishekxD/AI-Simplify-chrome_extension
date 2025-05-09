@@ -30,8 +30,14 @@ AI-Simplify is a powerful yet simple Chrome extension that uses AI to summarize 
 3. Enable **Developer Mode** (top-right corner)
 4. Click **Load unpacked** and select the extension folder
 5. Pin AI-Simplify to your Chrome toolbar for easy access
+6. Setup Your Gemini api key.(takes upto two minutes)
 
 ## 📸 Screenshots
+<img src="https://github.com/user-attachments/assets/7e7d5059-4a1d-44f1-bf9c-44b5fc48b3e6" alt="image1" width="300" style="border-radius: 10px;">
+<img src="https://github.com/user-attachments/assets/aefb0338-e9ee-403a-89d1-f3182df9f2e0" alt="image2" width="300" style="border-radius: 10px;">
+
+
+
 project is done and i will add some features in near future.
 
 <img src="https://media.giphy.com/media/cJMlR1SsCSkUjVY3iK/giphy.gif" width="160">
@@ -48,7 +54,7 @@ project is done and i will add some features in near future.
 
 ## 🌟 Upcoming Features
 
-- 🗣️ Audio summary (text-to-speech)
+- 🗣️ Audio summary (text-to-speech) (done) ✅
 - 🎯 Custom summary length settings
 - 📤 Export summaries (PDF, TXT)
 
