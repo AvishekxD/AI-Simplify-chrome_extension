@@ -1,4 +1,67 @@
+const speakBtn = document.getElementById("speak-btn");
+let isSpeaking = false;
+let utterance = null;
+
+function getFemaleVoice() {
+  const voices = window.speechSynthesis.getVoices();
+  return voices.find(v =>
+    v.lang.startsWith("en") &&
+    (
+      v.name.toLowerCase().includes("female") ||
+      v.name.toLowerCase().includes("woman") ||
+      v.name.toLowerCase().includes("girl") ||
+      v.name.toLowerCase().includes("susan") ||
+      v.name.toLowerCase().includes("zira") ||
+      v.name.toLowerCase().includes("linda") ||
+      v.name.toLowerCase().includes("emma") ||
+      v.name.toLowerCase().includes("samantha") ||
+      v.name.toLowerCase().includes("karen") ||
+      v.name.toLowerCase().includes("google us english")
+    )
+  ) || voices.find(v => v.lang.startsWith("en"));
+}
+
+speakBtn.addEventListener("click", () => {
+  const text = document.getElementById("result").innerText;
+  if (!text) return;
+
+  if (isSpeaking) {
+    window.speechSynthesis.cancel();
+    isSpeaking = false;
+    speakBtn.textContent = "Speak";
+    return;
+  }
+
+  utterance = new window.SpeechSynthesisUtterance(text);
+  const voice = getFemaleVoice();
+  if (voice) utterance.voice = voice;
+
+  isSpeaking = true;
+  speakBtn.textContent = "Stop";
+
+  utterance.onend = () => {
+    isSpeaking = false;
+    speakBtn.textContent = "Speak";
+  };
+  utterance.onerror = () => {
+    isSpeaking = false;
+    speakBtn.textContent = "Speak";
+  };
+
+  window.speechSynthesis.speak(utterance);
+});
+
+window.speechSynthesis.onvoiceschanged = () => {};
+
+function resetSpeakButton() {
+  window.speechSynthesis.cancel();
+  isSpeaking = false;
+  speakBtn.textContent = "Speak";
+}
+
 document.getElementById("summarize").addEventListener("click", () => {
+  resetSpeakButton();
+
   const resultDiv = document.getElementById("result");
   const summaryType = document.getElementById("summary-type").value;
 
@@ -23,8 +86,10 @@ document.getElementById("summarize").addEventListener("click", () => {
           try{
             const summary = await getGeminiSummary(text, summaryType, geminiApiKey);
             resultDiv.textContent = summary;
+            resetSpeakButton(); // Also reset after summary is set
           } catch(error){
             resultDiv.textContent = "Gemini error: " + error.message;
+            resetSpeakButton();
           }
         }
       );
@@ -33,7 +98,7 @@ document.getElementById("summarize").addEventListener("click", () => {
 });
 
 async function getGeminiSummary(rawText, type, apiKey) {
-  const max = 2000;
+  const max = 3000;
   const text = rawText.length > max ? rawText.slice(0, max) + "..." : rawText;
   const promptMap = {
     brief: `Summarize in 2-3 sentences:\n\n${text}`,
@@ -43,7 +108,7 @@ async function getGeminiSummary(rawText, type, apiKey) {
 
   const prompt = promptMap[type] || promptMap.brief;
 
-  const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`,
+  const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`,
     {
       method: "POST",
       headers: {"Content-type": "application/json"},

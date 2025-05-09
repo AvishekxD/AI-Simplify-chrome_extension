@@ -33,7 +33,7 @@
 
   "web_accessible_resources": [
     {
-      "resources": ["pdfjs/pdf.js", "pdfjs/pdf.worker.js"],
+      "resources": ["https://api.vapi.ai/*"],
       "matches": ["<all_urls>"]
     }
   ]
