@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="output.css">
     <style>
       html, body {
-        width: 500px;
+        width: 600px;
         font-family: 'Inter', sans-serif;
       }
       #result {
@@ -29,8 +29,11 @@
     </style>
   </head>
   <body>
-    <div class="container max-w-2xl mx-auto bg-white shadow-lg rounded-lg p-6 h-full">
-      <h2 id="crazy-heading" class="text-2xl font-bold text-indigo-600 flex flex-wrap justify-center py-2 cursor-default"></h2>
+    <div class="container max-w-2xl mx-auto bg-white shadow-lg p-6 h-full">
+        <div class="header-container flex flex-row justify-center items-center p-1">
+          <h2 id="crazy-heading" class="text-2xl font-bold text-indigo-600 ml-20">Welcome to the AI Summarizer!📝</h2>
+          <button class="rounded-md transition-all ease-in cursor-pointer ml-6 p-1 w-10 text-[14px]" id="dark-mode-toggle" aria-label="Toggle Dark Mode">🌙</button>
+        </div>
       <div class="flex flex-wrap justify-center gap-4 mb-4">
         <div class="relative inline-block">
           <select id="summary-type" class="appearance-none border border-gray-300 h-10 w-28 rounded-md py-2 px-3 pr-8 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
@@ -44,14 +47,15 @@
             </svg>
           </div>
         </div>
-        <button id="summarize" class="cursor-pointer font-semibold before:ease relative h-10 w-32 overflow-hidden border border-green-500 bg-green-500 text-white shadow-2xl transition-all before:absolute before:right-0 before:top-0 before:h-12 before:w-6 before:translate-x-12 before:rotate-6 before:bg-white before:opacity-10 before:duration-700 hover:shadow-green-500 hover:before:-translate-x-40 rounded-md">
+        <button id="summarize" class="cursor-pointer font-semibold text-[13px] before:ease relative h-10 w-32 overflow-hidden border border-green-500 bg-green-500 text-white shadow-2xl transition-all before:absolute before:right-0 before:top-0 before:h-12 before:w-6 before:translate-x-12 before:rotate-6 before:bg-white before:opacity-10 before:duration-700 hover:shadow-green-500 hover:before:-translate-x-40 rounded-md">
           Summarize
         </button>
-        <button id="copy-btn" class="cursor-pointer before:ease bg-blue-500 border-blue-700 relative text-white shadow-2xl font-semibold rounded-md py-2 px-4 transition-all before:absolute before:right-0 before:top-0 before:h-12 before:w-6 before:translate-x-12 before:rotate-6 before:bg-white before:opacity-10 before:duration-700 hover:shadow-blue-500 hover:before:-translate-x-40">
+        <button id="copy-btn" class="cursor-pointer relative text-white shadow-2xl font-semibold rounded-md py-2 px-4 transition-all before:absolute before:right-0 before:top-0 before:h-12 before:w-6 before:translate-x-12 before:rotate-6 before:bg-white before:opacity-10 before:duration-700 bg-blue-500 hover:bg-blue-700 hover:shadow-blue-500">
           Copy
         </button>
       </div>
       <div id="result" class="bg-gray-50 border border-gray-200 rounded-md p-4 text-gray-800 text-sm">Select a type and click Summarize...</div>
+      
     </div>
     <script src="popup.js"></script>
   </body>

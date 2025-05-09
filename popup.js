@@ -26,7 +26,6 @@ document.getElementById("summarize").addEventListener("click", () => {
           } catch(error){
             resultDiv.textContent = "Gemini error: " + error.message;
           }
-
         }
       );
     });
@@ -34,7 +33,7 @@ document.getElementById("summarize").addEventListener("click", () => {
 });
 
 async function getGeminiSummary(rawText, type, apiKey) {
-  const max = 20000;
+  const max = 2000;
   const text = rawText.length > max ? rawText.slice(0, max) + "..." : rawText;
   const promptMap = {
     brief: `Summarize in 2-3 sentences:\n\n${text}`,
@@ -75,7 +74,6 @@ document.getElementById("copy-btn").addEventListener("click", () => {
   });
 });
 
-
 const heading = "Welcome to the AI Summarizer! 📝";
 document.querySelector('#crazy-heading').innerHTML = Array.from(heading).map(char => {
   const isEmoji = /\p{Emoji}/u.test(char);
@@ -83,3 +81,38 @@ document.querySelector('#crazy-heading').innerHTML = Array.from(heading).map(cha
     ? `<span class="transition-all duration-500 hover:-translate-y-2 hover:scale-150 hover:rotate-12 hover:text-lime-400 inline-block cursor-default">${char}</span>`
     : char;
 }).join('');
+
+document.addEventListener('DOMContentLoaded', () => {
+  const darkModeToggle = document.getElementById('dark-mode-toggle');
+  const body = document.body;
+  const sunEmoji = '☀️';
+  const moonEmoji = '🌙';
+
+  function toggleDarkMode() {
+      body.classList.toggle('dark');
+      const isDarkMode = body.classList.contains('dark');
+      darkModeToggle.textContent = isDarkMode ? sunEmoji : moonEmoji;
+      if (isDarkMode) {
+          darkModeToggle.classList.remove('bg-amber-50', 'hover:bg-amber-100');
+          darkModeToggle.classList.add('dark:bg-slate-700', 'dark:hover:bg-slate-600');
+      } else {
+          darkModeToggle.classList.remove('dark:bg-slate-700', 'dark:hover:bg-slate-600');
+          darkModeToggle.classList.add('bg-amber-50', 'hover:bg-amber-100');
+      }
+      localStorage.setItem('darkMode', isDarkMode);
+  }
+
+  const savedDarkMode = localStorage.getItem('darkMode');
+  if (savedDarkMode === 'true') {
+      body.classList.add('dark');
+      darkModeToggle.textContent = sunEmoji;
+      darkModeToggle.classList.remove('bg-amber-50', 'hover:bg-amber-100');
+      darkModeToggle.classList.add('dark:bg-slate-700', 'dark:hover:bg-slate-600');
+  } else {
+      darkModeToggle.textContent = moonEmoji;
+      darkModeToggle.classList.remove('dark:bg-slate-700', 'dark:hover:bg-slate-600');
+      darkModeToggle.classList.add('bg-amber-50', 'hover:bg-amber-100');
+  }
+
+  darkModeToggle.addEventListener('click', toggleDarkMode);
+});
