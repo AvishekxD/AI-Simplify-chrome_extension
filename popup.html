@@ -9,12 +9,14 @@
       html, body {
         width: 600px;
         font-family: 'Inter', sans-serif;
+        overflow: hidden;
       }
       #result {
         white-space: pre-wrap;
         word-break: break-word;
       }
       .loader {
+        margin-left: 50%;
         border: 4px solid #f3f3f3;
         border-top: 4px solid #3498db;
         border-radius: 50%;
@@ -26,12 +28,13 @@
         0% { transform: rotate(0deg); }
         100% { transform: rotate(360deg); }
       }
+      
     </style>
   </head>
-  <body>
-    <div class="container max-w-2xl mx-auto bg-white shadow-lg p-6 h-full">
+  <body >
+    <div class="container max-w-2xl mx-auto bg-white shadow-lg p-6 h-full ">
         <div class="header-container flex flex-row justify-center items-center p-1">
-          <h2 id="crazy-heading" class="text-2xl font-bold text-indigo-600 ml-20">Welcome to the AI Summarizer!📝</h2>
+          <h2 id="crazy-heading" class="text-2xl font-bold text-indigo-600 ml-20 ">Welcome to the AI Summarizer!📝</h2>
           <button class="rounded-md transition-all ease-in cursor-pointer ml-6 p-1 w-10 text-[14px]" id="dark-mode-toggle" aria-label="Toggle Dark Mode">🌙</button>
         </div>
       <div class="flex flex-wrap justify-center gap-4 mb-4">
@@ -53,14 +56,55 @@
         <button id="copy-btn" class="cursor-pointer relative text-white shadow-2xl font-semibold rounded-md py-2 px-4 transition-all before:absolute before:right-0 before:top-0 before:h-12 before:w-6 before:translate-x-12 before:rotate-6 before:bg-white before:opacity-10 before:duration-700 bg-blue-500 hover:bg-blue-700 hover:shadow-blue-500 ">
           Copy
         </button>
+        <button id="notes-btn" class="cursor-pointer font-semibold text-[13px] before:ease relative h-10  w-22 overflow-hidden border-[1px] border-yellow-400 bg-yellow-500 text-white shadow-2xl transition-all before:absolute before:right-0 before:top-0 before:h-12 before:w-6 before:translate-x-12 before:rotate-6 before:bg-white before:opacity-10 before:duration-700 hover:shadow-yellow-500 hover:before:-translate-x-40 rounded-md">
+          Notes
+        </button>
       </div>
-      <div id="result" class="bg-gray-50 border border-gray-200 rounded-md p-4 text-gray-800 text-sm">Select a type and click Summarize...</div>
+      <div id="result" contenteditable="false" class="bg-gray-50  border border-gray-200 rounded-md text-gray-800 text-sm">
+        Select a type and click Summarize...
+      </div>
       <div class="flex justify-center items-center mt-4">
-        <button id="speak-btn" class="cursor-pointer font-semibold text-[13px] before:ease relative h-10 ml-[44px] w-22 overflow-hidden border-[1px] border-purple-500 bg-purple-500 text-white shadow-2xl transition-all before:absolute before:right-0 before:top-0 before:h-12 before:w-6 before:translate-x-12 before:rotate-6 before:bg-white before:opacity-10 before:duration-700 hover:shadow-purple-500 hover:before:-translate-x-40 rounded-md">
+        <button id="speak-btn" class="cursor-pointer font-semibold text-[13px] before:ease relative h-10 ml-[32px] w-22 overflow-hidden border-[1px] border-purple-500 bg-purple-500 text-white shadow-2xl transition-all before:absolute before:right-0 before:top-0 before:h-12 before:w-6 before:translate-x-12 before:rotate-6 before:bg-white before:opacity-10 before:duration-700 hover:shadow-purple-500 hover:before:-translate-x-40 rounded-md">
           Speak
+        </button>
+        <button id="save-as-note-btn" class="cursor-pointer ml-2.5 font-semibold text-[13px] before:ease relative h-10 w-28 overflow-hidden border-[1px] border-yellow-400 bg-yellow-500 text-white shadow-2xl transition-all before:absolute before:right-0 before:top-0 before:h-12 before:w-6 before:translate-x-12 before:rotate-6 before:bg-white before:opacity-10 before:duration-700 hover:shadow-yellow-500 hover:before:-translate-x-40 rounded-md hidden">
+          Save as Note
         </button>
       </div>
     </div>
+    <div id="notes-modal" class="fixed inset-0 bg-white shadow-lg hidden h-screen w-screen z-50 ">
+      <div class="bg-white container h-full w-full shadow-lg p-3 overflow-auto">
+        <button id="close-notes" class="absolute top-2 right-2 transition-all text-gray-400 hover:text-red-500 hover:ease-in text-2xl p-4 cursor-pointer">&times;</button>
+        <h2 id="crazy-heading2" class="text-xl font-semibold  text-indigo-600 dark:text-purple-400 mb-2 mt-4 font-sans">NOTES 📝</h2>
+        <div class="flex flex-wrap gap-2 ">
+          <input id="search-notes" type="text" placeholder="Search notes..." class="flex-1 border border-gray-500 hover:border-gray-400 rounded px-2 py-2 mb-2 sm:mb-0 before:ease relative overflow-hidden  shadow-2xl transition-all before:absolute before:right-0 before:top-0 before:h-12 before:w-6 before:translate-x-12 before:rotate-6 before:bg-white before:opacity-10 before:duration-700 dark:hover:shadow-gray-400  hover:before:-translate-x-40" />
+          <button id="add-note-btn" class="bg-green-500 text-white px-4 py-2  rounded mb-2 sm:mb-0  text-[13px] before:ease relative h-10 ml-3.5 w-22 overflow-hidden border-[1px] border-green-400 shadow-2xl transition-all before:absolute before:right-0 before:top-0 before:h-12 before:w-6 before:translate-x-12 before:rotate-6 before:bg-white before:opacity-10 before:duration-700 hover:shadow-green-500 hover:before:-translate-x-40 cursor-pointer">+ New</button>
+          <select id="export-select" class="border border-gray-400 rounded px-2 py-1 mb-2 sm:mb-0 font-semibold cursor-pointer">
+            <option value="">Export</option>
+            <option value="txt">Text</option>
+            <option value="docx">DOCX</option>
+            <option value="pdf">PDF</option>
+          </select>
+        </div>
+        <ul id="notes-list" class="space-y-2 mb-4 max-h-40 overflow-auto text-gray-800 text-[14px]"></ul>
+        <div id="notes-empty" class="flex items-center justify-center gap-6 text-gray-400 dark:text-gray-500 text-2xl py-2 w-full">
+          <div class="flex justify-center items-center gap-4">
+            <img src="images/hacker-girl-sticker.webp" alt="Nothing is there" class="w-24 h-24" />
+            <span class="font-medium">Nothing is there.</span>
+          </div>
+        </div>
+        <div id="note-editor" class="hidden">
+          <textarea id="note-content" class="w-full border border-gray-400 rounded p-2 h-24 mb-2"></textarea>
+          <div class="flex justify-between mb-2.5 font-semibold">
+            <button id="save-note-btn" class="bg-green-500 text-white px-4 py-2  rounded mb-2 sm:mb-0  text-[13px] before:ease relative h-10 ml-3.5 w-22 overflow-hidden border-[1px] border-green-400 shadow-2xl transition-all before:absolute before:right-0 before:top-0 before:h-12 before:w-6 before:translate-x-12 before:rotate-6 before:bg-white before:opacity-10 before:duration-700 hover:shadow-green-500 hover:before:-translate-x-40 cursor-pointer">Save</button>
+            <button id="cancel-note-btn" class="bg-gray-400  px-4 py-2  rounded mb-2 sm:mb-0  text-[13px] before:ease relative h-10 ml-3.5 w-22 overflow-hidden border-[1px] border-gray-400 shadow-2xl transition-all before:absolute before:right-0 before:top-0 before:h-12 before:w-6 before:translate-x-12 before:rotate-6 before:bg-white before:opacity-10 before:duration-700 hover:shadow-gray-400 hover:before:-translate-x-40 cursor-pointer">Cancel</button>
+          </div>
+        </div>
+        <input type="file" id="import-file" accept=".txt,.md,.note" class="hidden" />
+        <button id="import-btn" class="cursor-pointer font-semibold text-[13px] before:ease relative h-10 ml-3.5 w-22 overflow-hidden border-[1px] border-indigo-400 bg-indigo-500 text-white shadow-2xl transition-all before:absolute before:right-0 before:top-0 before:h-12 before:w-6 before:translate-x-12 before:rotate-6 before:bg-white before:opacity-10 before:duration-700 hover:shadow-indigo-500 hover:before:-translate-x-40 rounded-md">Import</button>
+      </div>
+    </div>
+    
     <script src="popup.js"></script>
   </body>
 </html>

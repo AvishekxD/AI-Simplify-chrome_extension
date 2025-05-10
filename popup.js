@@ -59,13 +59,30 @@ function resetSpeakButton() {
   speakBtn.textContent = "Speak";
 }
 
+const saveAsNoteBtn = document.getElementById("save-as-note-btn");
+
+saveAsNoteBtn.addEventListener("click", () => {
+  const content = document.getElementById("result").innerText.trim();
+  if (!content) return;
+  
+  // Save the note
+  const date = new Date().toLocaleString();
+  notes.unshift({ content, date, pinned: false });
+  saveNotes();
+  renderNotes();
+
+  // Disable the button and change its appearance
+  saveAsNoteBtn.disabled = true;
+  saveAsNoteBtn.classList.add('opacity-50', 'cursor-not-allowed');
+  saveAsNoteBtn.textContent = 'Saved ✓';
+});
+
 document.getElementById("summarize").addEventListener("click", () => {
-  resetSpeakButton();
-
   const resultDiv = document.getElementById("result");
-  const summaryType = document.getElementById("summary-type").value;
-
-  resultDiv.innerHTML = '<div class="loader"></div>';
+  resultDiv.innerHTML = '<div class="loader"></div>'; 
+  resultDiv.setAttribute('contenteditable', 'false'); 
+  resultDiv.classList.add('p-4'); 
+  saveAsNoteBtn.classList.add("hidden"); // Hide button while loading
 
   chrome.storage.sync.get(["geminiApiKey"], ({ geminiApiKey }) => {
     if(!geminiApiKey){
@@ -84,9 +101,16 @@ document.getElementById("summarize").addEventListener("click", () => {
           }
 
           try{
+            const summaryType = document.getElementById("summary-type").value;
             const summary = await getGeminiSummary(text, summaryType, geminiApiKey);
             resultDiv.textContent = summary;
-            resetSpeakButton(); // Also reset after summary is set
+            resetSpeakButton();
+            resultDiv.setAttribute('contenteditable', 'true'); 
+            
+            // Reset save button
+            saveAsNoteBtn.classList.remove("hidden", "opacity-50", "cursor-not-allowed");
+            saveAsNoteBtn.disabled = false;
+            saveAsNoteBtn.textContent = "Save as Note";
           } catch(error){
             resultDiv.textContent = "Gemini error: " + error.message;
             resetSpeakButton();
@@ -94,8 +118,10 @@ document.getElementById("summarize").addEventListener("click", () => {
         }
       );
     });
-  })
+  });
 });
+
+
 
 async function getGeminiSummary(rawText, type, apiKey) {
   const max = 3000;
@@ -147,6 +173,14 @@ document.querySelector('#crazy-heading').innerHTML = Array.from(heading).map(cha
     : char;
 }).join('');
 
+const notesHeading = "NOTES 📝";
+document.querySelector('#crazy-heading2').innerHTML = Array.from(notesHeading).map(char => {
+  const isEmoji = /\p{Emoji}/u.test(char);
+  return isEmoji
+    ? `<span class="transition-all duration-500 hover:-translate-y-2 hover:scale-150 hover:rotate-12 hover:text-lime-400 inline-block cursor-default">${char}</span>`
+    : char;
+}).join('');
+
 document.addEventListener('DOMContentLoaded', () => {
   const darkModeToggle = document.getElementById('dark-mode-toggle');
   const body = document.body;
@@ -181,3 +215,168 @@ document.addEventListener('DOMContentLoaded', () => {
 
   darkModeToggle.addEventListener('click', toggleDarkMode);
 });
+
+// Show notes modal
+document.getElementById("notes-btn").addEventListener("click", () => {
+  document.getElementById("notes-modal").classList.remove("hidden");
+  loadNotes();
+});
+
+// Hide notes modal
+document.getElementById("close-notes").addEventListener("click", () => {
+  document.getElementById("notes-modal").classList.add("hidden");
+});
+
+// --- Notes Logic ---
+let notes = [];
+let editingIndex = null;
+
+function saveNotes() {
+  chrome.storage.local.set({ notes });
+}
+
+function loadNotes() {
+  chrome.storage.local.get(["notes"], (result) => {
+    notes = result.notes || [];
+    renderNotes();
+  });
+}
+
+function renderNotes(filter = "") {
+  const list = document.getElementById("notes-list");
+  if (!list) return;
+  list.innerHTML = "";
+  notes
+    .filter(note => note.content.toLowerCase().includes(filter.toLowerCase()))
+    .forEach((note, idx) => {
+      const li = document.createElement("li");
+      li.className = "bg-gray-100 rounded p-2 flex justify-between items-center";
+      li.innerHTML = `
+        <div>
+          <span class="font-semibold">${note.pinned ? "📌" : ""}</span>
+          <span>${note.content.slice(0, 40)}${note.content.length > 40 ? "..." : ""}</span>
+          <span class="text-xs text-gray-400 ml-2">${note.date}</span>
+        </div>
+        <div class="flex gap-1">
+          <button class="copy-btn" title="Copy">📄</button>
+          <button class="pin-btn" title="Pin/Unpin">${note.pinned ? "📌" : "📌"}</button>
+          <button class="edit-btn" title="Edit">📝</button>
+          <button class="delete-btn" title="Delete">❌</button>
+        </div>
+      `;
+      li.querySelector(".copy-btn").onclick = () => {
+        navigator.clipboard.writeText(note.content);
+      };
+      li.querySelector(".pin-btn").onclick = () => {
+        note.pinned = !note.pinned;
+        notes.sort((a, b) => (b.pinned ? 1 : 0) - (a.pinned ? 1 : 0));
+        saveNotes();
+        renderNotes(filter);
+      };
+      li.querySelector(".edit-btn").onclick = () => {
+        editingIndex = idx;
+        document.getElementById("note-content").value = note.content;
+        document.getElementById("note-editor").classList.remove("hidden");
+      };
+      li.querySelector(".delete-btn").onclick = () => {
+        notes.splice(idx, 1);
+        saveNotes();
+        renderNotes(filter);
+      };
+      list.appendChild(li);
+    });
+
+  // Show/hide the empty state
+  const emptyDiv = document.getElementById('notes-empty');
+  const noteEditor = document.getElementById('note-editor');
+  if (notes.length === 0 && noteEditor.classList.contains('hidden')) {
+    emptyDiv.style.display = 'block';
+  } else {
+    emptyDiv.style.display = 'none';
+  }
+}
+
+document.getElementById("add-note-btn").onclick = () => {
+  editingIndex = null;
+  document.getElementById("note-content").value = "";
+  document.getElementById("note-editor").classList.remove("hidden");
+  document.getElementById("notes-empty").style.display = "none";
+};
+
+document.getElementById("save-note-btn").onclick = () => {
+  const content = document.getElementById("note-content").value.trim();
+  if (!content) return;
+  const date = new Date().toLocaleString();
+  if (editingIndex !== null) {
+    notes[editingIndex].content = content;
+    notes[editingIndex].date = date;
+  } else {
+    notes.unshift({ content, date, pinned: false });
+  }
+  saveNotes();
+  renderNotes();
+  document.getElementById("note-editor").classList.add("hidden");
+};
+
+document.getElementById("cancel-note-btn").onclick = () => {
+  document.getElementById("note-editor").classList.add("hidden");
+  if (notes.length === 0) {
+    document.getElementById("notes-empty").style.display = "block";
+  }
+};
+
+document.getElementById("search-notes").oninput = (e) => {
+  renderNotes(e.target.value);
+};
+
+// Export notes
+document.getElementById("export-select").onchange = async (e) => {
+  if (!e.target.value) return;
+  let data = "";
+  if (e.target.value === "txt") {
+    data = notes.map(n => `[${n.date}] ${n.content}`).join("\n\n");
+    const blob = new Blob([data], { type: "text/plain" });
+    downloadBlob(blob, "notes.txt");
+  } else if (e.target.value === "docx") {
+    const html = "<html><body>" + notes.map(n => `<p><b>[${n.date}]</b> ${n.content}</p>`).join("") + "</body></html>";
+    const blob = new Blob([html], { type: "application/msword" });
+    downloadBlob(blob, "notes.docx");
+  } else if (e.target.value === "pdf") {
+    if (!window.jspdf || !window.jspdf.jsPDF) {
+      alert("PDF export requires jsPDF library.");
+      return;
+    }
+    const doc = new window.jspdf.jsPDF();
+    notes.forEach((n, i) => {
+      doc.text(`[${n.date}] ${n.content}`, 10, 10 + i * 10);
+    });
+    doc.save("notes.pdf");
+  }
+  e.target.value = "";
+};
+
+function downloadBlob(blob, filename) {
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = filename;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+// Import notes
+document.getElementById("import-btn").onclick = () => {
+  document.getElementById("import-file").click();
+};
+document.getElementById("import-file").onchange = async (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+  const text = await file.text();
+  text.split(/\n{2,}/).forEach(line => {
+    if (line.trim()) notes.unshift({ content: line.trim(), date: new Date().toLocaleString(), pinned: false });
+  });
+  saveNotes();
+  renderNotes();
+};
+
+

@@ -3,7 +3,7 @@
   "name": "Ai Summary for Articles",
   "version": "1.0",
 
-  "permissions": ["scripting", "activeTab", "storage"],
+  "permissions": ["contextMenus","scripting", "activeTab", "storage"],
 
   "host_permissions": ["<all_urls>"],
 
@@ -33,7 +33,7 @@
 
   "web_accessible_resources": [
     {
-      "resources": ["https://api.vapi.ai/*"],
+      "resources": [""],
       "matches": ["<all_urls>"]
     }
   ]
