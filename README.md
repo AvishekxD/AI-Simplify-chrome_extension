@@ -50,12 +50,15 @@ project is done and i will add some features in near future.
    - 📌 **Bullet Points**
    - 📝 **Detailed Summary**
 4. View the summary instantly!
+5. quick notes for revision.
 
 ## 🌟 Upcoming Features
 
 - 🗣️ Audio summary (text-to-speech) (done) ✅
 - 🎯 Custom summary length settings
-- 📤 Export summaries (PDF, TXT)
+- 📤 Export summaries (PDF, TXT✅) 
+- 📝 note sections ✅
+- 🙂‍↔️ currently working on custom HTML context menu injection.
 
 ## 🤝 Contributing
 
