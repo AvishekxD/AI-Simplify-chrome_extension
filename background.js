@@ -14,24 +14,47 @@ chrome.runtime.onInstalled.addListener(() => {
     chrome.contextMenus.create({
         id: "summarizeSelection",
         title: "📝 Summarize selected text",
-        contexts: ["selection"]
-        // icon: { 
-        //     "16": "images/favicon-16x16.png",
-        //     "32": "images/favicon-32x32.png",
-        // }
-    });
-  });
-  
-  chrome.contextMenus.onClicked.addListener((info, tab) => {
-    if (info.menuItemId === "summarizeSelection") {
-      // You can replace this with your own functionality
-      chrome.scripting.executeScript({
-        target: { tabId: tab.id },
-        function: () => {
-          alert("You clicked the custom button on selected text!");
-        }
+        contexts: ["page","selection"]
       });
-    }
-  });
 
+      chrome.contextMenus.create({
+        id: "subItem1",
+        parentId: "summarizeSelection",
+        title: "Brief ",
+        contexts: ["page", "selection"]
+      });
+
+      chrome.contextMenus.create({
+        id: "subItem2",
+        parentId: "summarizeSelection",
+        title: "Detailed",
+        contexts: ["page", "selection"]
+      });
+
+      chrome.contextMenus.create({
+        id: "subItem3",
+        parentId: "summarizeSelection",
+        title: "Bullet Points ",
+        contexts: ["page", "selection"]
+      })
+  });
   
+chrome.contextMenus.onClicked.addListener((info, tab) => {
+  let summaryType = null;
+  if (info.menuItemId === "subItem1") summaryType = "brief";
+  if (info.menuItemId === "subItem2") summaryType = "detailed";
+  if (info.menuItemId === "subItem3") summaryType = "bullets";
+
+  if (summaryType && info.selectionText) {
+    // Save selection and type for popup to use
+    chrome.storage.local.set({
+      contextSummaryRequest: {
+        text: info.selectionText,
+        type: summaryType
+      }
+    }, () => {
+      chrome.action.openPopup(); // Open popup immediately
+    });
+  }
+});
+

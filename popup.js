@@ -216,6 +216,88 @@ document.addEventListener('DOMContentLoaded', () => {
   darkModeToggle.addEventListener('click', toggleDarkMode);
 });
 
+document.addEventListener("DOMContentLoaded", () => {
+  chrome.storage.local.get("contextSummary", ({ contextSummary }) => {
+    if (contextSummary) {
+      // Set the summary type and input text in your popup
+      document.getElementById("summary-type").value = contextSummary.type;
+      document.getElementById("input-text").value = contextSummary.text; 
+
+      // Optionally, trigger summarization automatically
+      document.getElementById("summarize").click();
+
+      // Clear the contextSummary so it doesn't repeat
+      chrome.storage.local.remove("contextSummary");
+    }
+  });
+});
+
+document.addEventListener("DOMContentLoaded", () => {
+  chrome.storage.local.get("contextSummaryResult", ({ contextSummaryResult }) => {
+    if (contextSummaryResult) {
+      const resultDiv = document.getElementById("result");
+      resultDiv.textContent = contextSummaryResult;
+      resultDiv.classList.add('p-4');
+      resultDiv.setAttribute('contenteditable', 'true');
+      // Clear it so it doesn't show again next time
+      chrome.storage.local.remove("contextSummaryResult");
+    }
+  });
+});
+
+document.addEventListener("DOMContentLoaded", () => {
+  chrome.storage.local.get("contextSummaryRequest", ({ contextSummaryRequest }) => {
+    if (contextSummaryRequest) {
+      const resultDiv = document.getElementById("result");
+      resultDiv.innerHTML = '<div class="loader"></div>';
+      resultDiv.classList.add('p-4');
+      resultDiv.setAttribute('contenteditable', 'false');
+
+      // Fetch API key
+      chrome.storage.sync.get(["geminiApiKey"], (result) => {
+        const apiKey = result.geminiApiKey;
+        if (!apiKey) {
+          resultDiv.textContent = "No Gemini API key set. Please set it in extension options.";
+          chrome.storage.local.remove("contextSummaryRequest");
+          return;
+        }
+
+        // Build prompt
+        const text = contextSummaryRequest.text;
+        const summaryType = contextSummaryRequest.type;
+        const promptMap = {
+          brief: `Summarize in 2-3 sentences:\n\n${text}`,
+          detailed: `Give a detailed summary:\n\n${text}`,
+          bullets: `Summarize in 5-7 bullets points( start each line with "- "):\n\n${text}`,
+        };
+        const prompt = promptMap[summaryType];
+
+        fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            contents: [{ parts: [{ text: prompt }] }]
+          })
+        })
+          .then(res => res.json())
+          .then(data => {
+            let summary = "No summary found.";
+            try {
+              summary = data.candidates[0].content.parts[0].text;
+            } catch (e) {}
+            resultDiv.textContent = summary;
+            resultDiv.setAttribute('contenteditable', 'true');
+            chrome.storage.local.remove("contextSummaryRequest");
+          })
+          .catch(err => {
+            resultDiv.textContent = "Failed to summarize: " + err.message;
+            chrome.storage.local.remove("contextSummaryRequest");
+          });
+      });
+    }
+  });
+});
+
 // Show notes modal
 document.getElementById("notes-btn").addEventListener("click", () => {
   document.getElementById("notes-modal").classList.remove("hidden");
