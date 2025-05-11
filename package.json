@@ -1,9 +1,12 @@
 {
   "dependencies": {
     "@tailwindcss/cli": "^4.1.5",
-    "@vapi-ai/web": "^2.3.0",
-    "pdfjs-dist": "^5.2.133",
+    "docx": "^9.5.0",
     "tailwind-scrollbar": "^4.0.2",
     "tailwindcss": "^4.1.5"
+  },
+  "devDependencies": {
+    "webpack": "^5.99.8",
+    "webpack-cli": "^6.0.1"
   }
 }

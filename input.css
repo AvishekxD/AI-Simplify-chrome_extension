@@ -45,19 +45,18 @@
   color: #ffffff;
 }
 
-/* Global scrollbar styling for all scrollable elements */
 *::-webkit-scrollbar {
-  width: 8px;
-  height: 8px; /* for horizontal scrollbars */
+  width: 10px;
+  height: 8px; 
 }
 
 *::-webkit-scrollbar-track {
-  background: #111827; /* your preferred background (tailwind: bg-gray-900) */
+  background: #111827;
 }
 
 *::-webkit-scrollbar-thumb {
-  background-color: #4b5563; /* tailwind: gray-600 */
+  background-color: #4b5563; 
   border-radius: 6px;
-  border: 2px solid #111827; /* optional: gives spacing effect */
+  border: 2px solid #111827; 
 }
 

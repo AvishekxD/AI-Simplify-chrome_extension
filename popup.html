@@ -83,10 +83,9 @@
             <option value="">Export</option>
             <option value="txt">Text</option>
             <option value="docx">DOCX</option>
-            <option value="pdf">PDF</option>
           </select>
         </div>
-        <ul id="notes-list" class="space-y-2 mb-4 max-h-40 overflow-auto text-gray-800 text-[14px]"></ul>
+        <ul id="notes-list" class="space-y-2 mb-4 max-h-40 overflow-auto transition-all hover:scale-101 ease-in duration-200 text-gray-800 text-[14px]"></ul>
         <div id="notes-empty" class="flex items-center justify-center gap-6 text-gray-400 dark:text-gray-500 text-2xl py-2 w-full">
           <div class="flex justify-center items-center gap-4">
             <img src="images/hacker-girl-sticker.webp" alt="Nothing is there" class="w-24 h-24" />
@@ -106,5 +105,6 @@
     </div>
     
     <script src="popup.js"></script>
+    <script src="dist/popup.bundle.js"></script>
   </body>
 </html>
