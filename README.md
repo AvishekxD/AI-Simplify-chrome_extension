@@ -58,7 +58,9 @@ project is done and i will add some features in near future.
 - 🎯 Custom summary length settings
 - 📤 Export summaries (PDF, TXT✅) 
 - 📝 note sections ✅
-- 🙂‍↔️ currently working on custom HTML context menu injection.
+- 🌙 Dark Mode ✅
+- 📕 context menu for selected text summarize.
+- 🙂‍↔️ currently working on extra features.
 
 ## 🤝 Contributing
 
