@@ -14,28 +14,28 @@ chrome.runtime.onInstalled.addListener(() => {
     chrome.contextMenus.create({
         id: "summarizeSelection",
         title: "📝 Summarize selected text",
-        contexts: ["page","selection"]
+        contexts: ["selection"]
       });
 
       chrome.contextMenus.create({
         id: "subItem1",
         parentId: "summarizeSelection",
         title: "Brief ",
-        contexts: ["page", "selection"]
+        contexts: ["selection"]
       });
 
       chrome.contextMenus.create({
         id: "subItem2",
         parentId: "summarizeSelection",
         title: "Detailed",
-        contexts: ["page", "selection"]
+        contexts: ["selection"]
       });
 
       chrome.contextMenus.create({
         id: "subItem3",
         parentId: "summarizeSelection",
         title: "Bullet Points ",
-        contexts: ["page", "selection"]
+        contexts: ["selection"]
       })
   });
   

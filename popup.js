@@ -442,12 +442,26 @@ document.getElementById("import-btn").onclick = () => {
 document.getElementById("import-file").onchange = async (e) => {
   const file = e.target.files[0];
   if (!file) return;
-  const text = await file.text();
-  text.split(/\n{2,}/).forEach((line) => {
-   if (line.trim()) notes.unshift({ content: line.trim(), date: new Date().toLocaleString(), pinned: false });
+  
+  chrome.storage.local.get(["notes"], async (result) => {
+    // Load existing notes first
+    notes = result.notes || [];
+    
+    const text = await file.text();
+    text.split(/\n{2,}/).forEach((line) => {
+      if (line.trim()) {
+        notes.unshift({ 
+          content: line.trim(), 
+          date: new Date().toLocaleString(), 
+          pinned: false 
+        });
+      }
+    });
+    
+    chrome.storage.local.set({ notes }, () => {
+      renderNotes();
+    });
   });
-  saveNotes();
-  renderNotes();
 };
 
 /* =======================
@@ -455,13 +469,21 @@ document.getElementById("import-file").onchange = async (e) => {
   ======================= */
 const saveAsNoteBtn = document.getElementById("save-as-note-btn");
 saveAsNoteBtn.addEventListener("click", () => {
-  const content = document.getElementById("result").innerText.trim();
-  if (!content) return;
-  const date = new Date().toLocaleString();
-  notes.unshift({ content, date, pinned: false });
-  saveNotes();
-  renderNotes();
-  saveAsNoteBtn.disabled = true;
-  saveAsNoteBtn.classList.add("opacity-50", "cursor-not-allowed");
-  saveAsNoteBtn.textContent = "Saved ✓";
+  chrome.storage.local.get(["notes"], (result) => {
+    // Load existing notes first
+    notes = result.notes || [];
+    
+    const content = document.getElementById("result").innerText.trim();
+    if (!content) return;
+    
+    const date = new Date().toLocaleString();
+    notes.unshift({ content, date, pinned: false });
+    
+    chrome.storage.local.set({ notes }, () => {
+      renderNotes();
+      saveAsNoteBtn.disabled = true;
+      saveAsNoteBtn.classList.add("opacity-50", "cursor-not-allowed");
+      saveAsNoteBtn.textContent = "Saved ✓";
+    });
+  });
 });
