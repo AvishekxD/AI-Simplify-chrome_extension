@@ -61,6 +61,7 @@ project is done and i will add some features in near future.
 - 🌙 Dark Mode ✅
 - 📕 context menu for selected text summarize ✅
 - 🙂‍↔️ currently working on extra features.
+- 🔎 will add the search bar option to the user, so that they can search anything from Gemini 2.0 directly from a popup and get the result in Brief,Detailed, and in bullet points.
 
 ## 🤝 Contributing
 
