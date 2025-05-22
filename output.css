@@ -230,6 +230,9 @@ button, input:where([type='button'], [type='reset'], [type='submit']), ::file-se
 .ml-2\.5 {
   margin-left: calc(var(--spacing) * 2.5);
 }
+.ml-3 {
+  margin-left: calc(var(--spacing) * 3);
+}
 .ml-3\.5 {
   margin-left: calc(var(--spacing) * 3.5);
 }
@@ -311,6 +314,9 @@ button, input:where([type='button'], [type='reset'], [type='submit']), ::file-se
 .h-10 {
   height: calc(var(--spacing) * 10);
 }
+.h-10\/12 {
+  height: calc(10/12 * 100%);
+}
 .h-24 {
   height: calc(var(--spacing) * 24);
 }
@@ -323,8 +329,23 @@ button, input:where([type='button'], [type='reset'], [type='submit']), ::file-se
 .max-h-40 {
   max-height: calc(var(--spacing) * 40);
 }
+.w-3 {
+  width: calc(var(--spacing) * 3);
+}
+.w-3\/4 {
+  width: calc(3/4 * 100%);
+}
+.w-4 {
+  width: calc(var(--spacing) * 4);
+}
+.w-4\/5 {
+  width: calc(4/5 * 100%);
+}
 .w-5 {
   width: calc(var(--spacing) * 5);
+}
+.w-5\/6 {
+  width: calc(5/6 * 100%);
 }
 .w-10 {
   width: calc(var(--spacing) * 10);
@@ -341,6 +362,21 @@ button, input:where([type='button'], [type='reset'], [type='submit']), ::file-se
 .w-32 {
   width: calc(var(--spacing) * 32);
 }
+.w-\[75\%\] {
+  width: 75%;
+}
+.w-\[80\%\] {
+  width: 80%;
+}
+.w-\[85\%\] {
+  width: 85%;
+}
+.w-\[90\%\] {
+  width: 90%;
+}
+.w-\[100\%\] {
+  width: 100%;
+}
 .w-full {
   width: 100%;
 }
@@ -352,6 +388,9 @@ button, input:where([type='button'], [type='reset'], [type='submit']), ::file-se
 }
 .flex-1 {
   flex: 1;
+}
+.border-collapse {
+  border-collapse: collapse;
 }
 .transform {
   transform: var(--tw-rotate-x,) var(--tw-rotate-y,) var(--tw-rotate-z,) var(--tw-skew-x,) var(--tw-skew-y,);
@@ -365,8 +404,14 @@ button, input:where([type='button'], [type='reset'], [type='submit']), ::file-se
 .cursor-pointer {
   cursor: pointer;
 }
+.resize {
+  resize: both;
+}
 .appearance-none {
   appearance: none;
+}
+.flex-col {
+  flex-direction: column;
 }
 .flex-row {
   flex-direction: row;
@@ -497,6 +542,12 @@ button, input:where([type='button'], [type='reset'], [type='submit']), ::file-se
 .p-6 {
   padding: calc(var(--spacing) * 6);
 }
+.p-8 {
+  padding: calc(var(--spacing) * 8);
+}
+.p-12 {
+  padding: calc(var(--spacing) * 12);
+}
 .px-2 {
   padding-inline: calc(var(--spacing) * 2);
 }
@@ -625,6 +676,10 @@ button, input:where([type='button'], [type='reset'], [type='submit']), ::file-se
 .shadow-md {
   --tw-shadow: 0 4px 6px -1px var(--tw-shadow-color, rgb(0 0 0 / 0.1)), 0 2px 4px -2px var(--tw-shadow-color, rgb(0 0 0 / 0.1));
   box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
+}
+.outline {
+  outline-style: var(--tw-outline-style);
+  outline-width: 1px;
 }
 .blur {
   --tw-blur: blur(8px);
@@ -1165,16 +1220,16 @@ button, input:where([type='button'], [type='reset'], [type='submit']), ::file-se
   color: #ffffff;
 }
 *::-webkit-scrollbar {
-  width: 10px;
+  width: 7px;
   height: 8px;
 }
 *::-webkit-scrollbar-track {
-  background: #111827;
+  border-radius: 12px;
 }
 *::-webkit-scrollbar-thumb {
-  background-color: #4b5563;
+  background-color: #52565b;
   border-radius: 6px;
-  border: 2px solid #111827;
+  border: 2px solid #4b5563;
 }
 @property --tw-rotate-x {
   syntax: "*";
@@ -1278,6 +1333,11 @@ button, input:where([type='button'], [type='reset'], [type='submit']), ::file-se
   syntax: "*";
   inherits: false;
   initial-value: 0 0 #0000;
+}
+@property --tw-outline-style {
+  syntax: "*";
+  inherits: false;
+  initial-value: solid;
 }
 @property --tw-blur {
   syntax: "*";
@@ -1401,6 +1461,7 @@ button, input:where([type='button'], [type='reset'], [type='submit']), ::file-se
       --tw-ring-offset-width: 0px;
       --tw-ring-offset-color: #fff;
       --tw-ring-offset-shadow: 0 0 #0000;
+      --tw-outline-style: solid;
       --tw-blur: initial;
       --tw-brightness: initial;
       --tw-contrast: initial;
